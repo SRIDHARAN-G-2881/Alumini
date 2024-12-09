@@ -25,6 +25,7 @@ import UpdateGallery from './pages/UpdateGallery.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import Gallery from './pages/Gallery.jsx';
 import OnlyAlumniPrivateRoute from './components/OnlyAlumniPrivateRoute.jsx'
+import Chat from './components/Chat.jsx';
 
 
 
@@ -40,7 +41,7 @@ export default function App() {
         <Route path="/student-signup" element={<StudentSignup />} />
         <Route path="/alumni-signup" element={<AlumniSignup />} />
         <Route path="/about" element={<About />} />
-        
+        <Route path="/chat" element={<Chat />} />
         
         
         
