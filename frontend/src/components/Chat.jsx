@@ -1,87 +1,89 @@
-import { useState } from "react";
-import { Configuration, OpenAIApi } from "openai";
-// const configuration = new Configuration({
-//   organization: "",
-//   apiKey: "",
-// });
-// const openai = new OpenAIApi(configuration);
+import React, { useState, useEffect } from "react";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-function Chat() {
-  const [message, setMessage] = useState("");
-  const [chats, setChats] = useState([]);
-  const [isTyping, setIsTyping] = useState(false);
+// Style components using Tailwind CSS
+import "./App.css";
+import ChatHistory from "./ChatHistory";
+import Loading from "./Loading";
 
-  const chat = async (e, message) => {
-    e.preventDefault();
+const Chat = () => {
+  const [userInput, setUserInput] = useState("");
+  const [chatHistory, setChatHistory] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-    if (!message) return;
-    setIsTyping(true);
-    scrollTo(0,1e10)
+  // inislize your Gemeni Api
+  const genAI = new GoogleGenerativeAI(
+    ""
+  );
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    let msgs = chats;
-    msgs.push({ role: "user", content: message });
-    setChats(msgs);
+  // Function to handle user input
+  const handleUserInput = (e) => {
+    setUserInput(e.target.value);
+  };
 
-    setMessage("");
+  // Function to send user message to Gemini
+  const sendMessage = async () => {
+    if (userInput.trim() === "") return;
 
-    await openai
-      .createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a EbereGPT. You can help with graphic design tasks",
-          },
-          ...chats,
-        ],
-      })
-      .then((res) => {
-        msgs.push(res.data.choices[0].message);
-        setChats(msgs);
-        setIsTyping(false);
-        scrollTo(0,1e10)
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setIsLoading(true);
+    try {
+      // call Gemini Api to get a response
+      const result = await model.generateContent(userInput);
+      const response = await result.response;
+      console.log(response);
+      // add Gemeni's response to the chat history
+      setChatHistory([
+        ...chatHistory,
+        { type: "user", message: userInput },
+        { type: "bot", message: response.text() },
+      ]);
+    } catch {
+      console.error("Error sending message");
+    } finally {
+      setUserInput("");
+      setIsLoading(false);
+    }
+  };
+
+  // Function to clear the chat history
+  const clearChat = () => {
+    setChatHistory([]);
   };
 
   return (
-    <main>
-      <h1>Chat AI Tutorial</h1>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold text-center mb-4">Chatbot</h1>
 
-      <section>
-        {chats && chats.length
-          ? chats.map((chat, index) => (
-              <p key={index} className={chat.role === "user" ? "user_msg" : ""}>
-                <span>
-                  <b>{chat.role.toUpperCase()}</b>
-                </span>
-                <span>:</span>
-                <span>{chat.content}</span>
-              </p>
-            ))
-          : ""}
-      </section>
-
-      <div className={isTyping ? "" : "hide"}>
-        <p>
-          <i>{isTyping ? "Typing" : ""}</i>
-        </p>
+      <div className="chat-container rounded-lg shadow-md p-4">
+        <ChatHistory chatHistory={chatHistory} />
+        <Loading isLoading={isLoading} />
       </div>
 
-      <form action="" onSubmit={(e) => chat(e, message)}>
+      <div className="flex mt-4">
         <input
           type="text"
-          name="message"
-          value={message}
-          placeholder="Type a message here and hit Enter..."
-          onChange={(e) => setMessage(e.target.value)}
+          className="flex-grow px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Type your message..."
+          value={userInput}
+          onChange={handleUserInput}
         />
-      </form>
-    </main>
+        <button
+          className="px-4 py-2 ml-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
+          onClick={sendMessage}
+          disabled={isLoading}
+        >
+          Send
+        </button>
+      </div>
+      <button
+        className="mt-4 block px-4 py-2 rounded-lg bg-gray-400 text-white hover:bg-gray-500 focus:outline-none"
+        onClick={clearChat}
+      >
+        Clear Chat
+      </button>
+    </div>
   );
-}
+};
 
 export default Chat;
