@@ -52,11 +52,20 @@ export default function AlumniLogin() {
                 <div className='flex-1'>
                     <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                         <div>
-                            <Label value='Your studentID' />
+                            <Label value='Your Alumini ID' />
                             <TextInput
                                 type='text'
-                                placeholder='studentID'
+                                placeholder='alumini id'
                                 id='studentID'
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div>
+                            <Label value='Alumini User Id' />
+                            <TextInput
+                                type='text'
+                                placeholder='user id'
+                                id='user_id'
                                 onChange={handleChange}
                             />
                         </div>
