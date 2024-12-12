@@ -140,6 +140,7 @@ const alumniSignup = async (req, res, next) => {
     role,
     linkedinUrl,
     isAlumni: true,
+    isAdmin:true
   });
 
   try {
