@@ -46,7 +46,7 @@ const FetchAlumni = () => {
         <p>No alumni are currently working at {companyname}.</p>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <h1 className='bg-blue-800'>helooo</h1>
+         
           {officeBearers.map(officeBearer => (
             <AlumniCard key={officeBearer._id} alumnus={officeBearer} />
           ))}

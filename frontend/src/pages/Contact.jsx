@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, Label, TextInput, Textarea } from 'flowbite-react';
 import { BACKEND_URL } from '../url';
+import raj from "../assets/rajasthan.png"
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -67,11 +68,13 @@ const Contact = () => {
       </p>
 
       <div className="grid grid-cols-1 gap-x-12 gap-y-6 lg:grid-cols-2 items-start">
-        <img
-          src="https://www.material-tailwind.com/image/map.svg"
-          alt="map"
-          className="w-full h-full lg:max-h-[510px]"
-        />
+       
+<img 
+  src={raj} 
+  alt="map" 
+  className="w-full h-full lg:max-h-[510px] rounded-3xl border-4 border-gray-200"
+/>
+
         <form
           className="flex flex-col gap-4 lg:max-w-sm"
           onSubmit={handleSubmit}

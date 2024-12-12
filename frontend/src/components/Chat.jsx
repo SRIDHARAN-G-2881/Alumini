@@ -13,7 +13,7 @@ const Chat = () => {
 
   // inislize your Gemeni Api
   const genAI = new GoogleGenerativeAI(
-    "Here Gemini API should be added" // Put Gemini api key here 
+    "" // Put Gemini api key here 
   );
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
