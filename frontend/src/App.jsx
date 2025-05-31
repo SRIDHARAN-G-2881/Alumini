@@ -26,6 +26,7 @@ import ScrollToTop from './components/ScrollToTop.jsx';
 import Gallery from './pages/Gallery.jsx';
 import OnlyAlumniPrivateRoute from './components/OnlyAlumniPrivateRoute.jsx'
 import Chat from './components/Chat.jsx';
+import AdminLogin from './pages/AdminLogin.jsx';
 
 
 
@@ -42,7 +43,7 @@ export default function App() {
         <Route path="/alumni-signup" element={<AlumniSignup />} />
         <Route path="/about" element={<About />} />
         <Route path="/chat" element={<Chat />} />
-        
+        <Route path="/admin" element={<AdminLogin/>} />
         
         
         <Route element={<PrivateRoute />}>

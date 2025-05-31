@@ -126,6 +126,7 @@ export default function AlumniSignup() {
             }
 
             setLoading(false);
+
             if (res.ok) {
                 navigate('/alumni-login');
             }

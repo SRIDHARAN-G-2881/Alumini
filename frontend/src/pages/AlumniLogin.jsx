@@ -55,8 +55,17 @@ export default function AlumniLogin() {
                             <Label value='Your AluminiID' />
                             <TextInput
                                 type='text'
-                                placeholder='studentID'
+                                placeholder='alumini id'
                                 id='studentID'
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div>
+                            <Label value='Alumini User Id' />
+                            <TextInput
+                                type='text'
+                                placeholder='user id'
+                                id='user_id'
                                 onChange={handleChange}
                             />
                         </div>

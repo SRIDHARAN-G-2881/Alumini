@@ -7,8 +7,9 @@ import {
     signInSuccess,
     signInFailure,
 } from '../redux/student/studentSlice';
+import { BACKEND_URL } from '../url';
 
-export default function AlumniLogin() {
+export default function AdminLogin() {
     const [formData, setFormData] = useState({});
     const { error: errorMessage } = useSelector((state) => state.student);
     const dispatch = useDispatch();
@@ -23,10 +24,11 @@ export default function AlumniLogin() {
         }
         try {
             dispatch(signInStart());
-            const res = await fetch('/server/studentauth/alumni-login', {
+            const res = await fetch(`${BACKEND_URL}/server/studentauth/admin-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
+                credentials: 'include',
             });
             const data = await res.json();
             if (data.success === false) {
@@ -44,22 +46,22 @@ export default function AlumniLogin() {
     return (
         <div className='min-h-screen mt-20'>
             <div className='flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5'>
-
-
+                
+                
 
                 <div className='flex-1'>
                     <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                         <div>
-                            <Label value='Your studentID' />
+                            <Label value='Admin Id' />
                             <TextInput
                                 type='text'
-                                placeholder='studentID'
+                                placeholder='adminId'
                                 id='studentID'
                                 onChange={handleChange}
                             />
                         </div>
                         <div>
-                            <Label value='Your password' />
+                            <Label value='Admin password' />
                             <TextInput
                                 type='password'
                                 placeholder='**********'
@@ -68,12 +70,12 @@ export default function AlumniLogin() {
                             />
                         </div>
                         <Button
-
+                        
                             type='submit'
                         >
                             Log In
                         </Button>
-
+        
                     </form>
                     <div className='flex gap-2 text-sm mt-5'>
                         <span>Dont Have an account?</span>
