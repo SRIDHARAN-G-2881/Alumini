@@ -120,18 +120,6 @@ export default function DashSidebar() {
 
                     }
                     {
-
-                        currentstudent.isAlumni && (
-                            <Link to='/alumni/create-post' >
-                                <Sidebar.Item icon={FaUpload} as='div'>
-                                    Upload Posts
-                                </Sidebar.Item>
-
-                            </Link>
-                        )
-
-                    }
-                    {
                         currentstudent.isAdmin && (
                             <Link to='/dashboard?tab=users' >
                                 <Sidebar.Item active={tab === 'users'} icon={HiOutlineUserGroup} as='div'>

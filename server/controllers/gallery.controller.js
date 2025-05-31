@@ -28,6 +28,7 @@ const create = async (req, res, next) => {
 };
 
 const getposts = async (req, res, next) => {
+  console.log("commm");
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 9;

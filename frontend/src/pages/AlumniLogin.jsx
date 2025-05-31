@@ -52,7 +52,7 @@ export default function AlumniLogin() {
                 <div className='flex-1'>
                     <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                         <div>
-                            <Label value='Your studentID' />
+                            <Label value='Your AluminiID' />
                             <TextInput
                                 type='text'
                                 placeholder='studentID'

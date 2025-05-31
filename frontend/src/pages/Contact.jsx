@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, Label, TextInput, Textarea } from 'flowbite-react';
 import { BACKEND_URL } from '../url';
 import raj from "../assets/rajasthan.png"
+import Feed from "../assets/FeeedBack.jpg";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -56,7 +57,7 @@ const Contact = () => {
     <div className="container mx-auto text-center">
       {/* Replace Typography with standard HTML tags */}
       <h5 className="mb-4 text-base lg:text-2xl text-blue-gray-700">
-        Customer Care
+       
       </h5>
       <h1 className="mb-4 text-3xl lg:text-5xl text-blue-gray-700">
         We&apos;re Here to Help
@@ -69,7 +70,7 @@ const Contact = () => {
 
       <div className="grid grid-cols-1 gap-x-12 gap-y-6 lg:grid-cols-2 items-start">
         <img
-           src={raj}
+           src={Feed}
           alt="map"
           className="w-full h-full lg:max-h-[510px]"
         />

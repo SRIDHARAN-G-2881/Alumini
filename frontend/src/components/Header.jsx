@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
 import { signoutSuccess } from "../redux/student/studentSlice";
 import { AiOutlineSearch } from "react-icons/ai";
+import { BACKEND_URL } from "../url.js";
 
 export default function Header() {
   const path = useLocation().pathname;
@@ -20,20 +21,21 @@ export default function Header() {
   const { theme } = useSelector((state) => state.theme);
 
   const handleSignout = async () => {
-    try {
-      const res = await fetch("/server/student/signout", {
-        method: "POST",
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        console.log(data.message);
-      } else {
-        dispatch(signoutSuccess());
+      try {
+        const res = await fetch(`${BACKEND_URL}/server/student/signout`, {
+          method: "POST",
+          credentials: 'include',
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          console.log(data.message);
+        } else {
+          dispatch(signoutSuccess());
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    };
 
   return (
     <Navbar className=" border-b-2 p-4">
@@ -111,6 +113,8 @@ export default function Header() {
         <Navbar.Link active={path === "/about"} as={"div"}>
           <Link to="/about">About</Link>
         </Navbar.Link>
+        
+        
       </Navbar.Collapse>
     </Navbar>
   );

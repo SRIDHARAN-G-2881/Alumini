@@ -53,6 +53,7 @@ const signupStudent = async (req, res, next) => {
 
 const loginStudent = async (req, res, next) => {
   const { studentID, password } = req.body;
+  // console.log("yess")
 
   if (!studentID || !password || studentID === "" || password === "") {
     next(errorHandler(400, "All fields are required"));
@@ -89,6 +90,7 @@ const loginStudent = async (req, res, next) => {
 
 
 const alumniSignup = async (req, res, next) => {
+  console.log(req.body)
   const {
     name,
     email,

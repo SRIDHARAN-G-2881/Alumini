@@ -44,7 +44,8 @@ export default function DashboardComp() {
         }
         const fetchJobs = async () => {
             try {
-                const res = await fetch('https://connect-alumni-backend.vercel.app/server/job/getjobs?limit=5', {
+                
+                const res = await fetch(`${BACKEND_URL}/server/job/getjobs?limit=5`, {
                     credentials: 'include',
                 })
                 const data = await res.json()
@@ -60,11 +61,13 @@ export default function DashboardComp() {
 
         const fetchPosts = async () => {
             try {
-                const res = await fetch('https://connect-alumni-backend.vercel.app/server/post/getposts?limit=5', {
+                
+                const res = await fetch(`${BACKEND_URL}/server/post/getposts?limit=5`, {
                     credentials: 'include',
                 })
                 const data = await res.json()
-                if (res.ok) {
+                console.log(data);
+                if (res.ok) {   
                     setPosts(data.posts)
                     setTotalPosts(data.totalPosts)
                     setLastMonthPosts(data.lastMonthPosts)
@@ -76,7 +79,8 @@ export default function DashboardComp() {
 
         const fetchEvents = async () => {
             try {
-                const res = await fetch('https://connect-alumni-backend.vercel.app/server/event/getevents?limit=5', {
+                
+                const res = await fetch(`${BACKEND_URL}/server/event/getevents?limit=5`, {
                     credentials: 'include',
                 })
                 const data = await res.json()

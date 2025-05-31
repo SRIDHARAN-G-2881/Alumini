@@ -1,87 +1,92 @@
-import { useState } from "react";
-import { Configuration, OpenAIApi } from "openai";
-// const configuration = new Configuration({
-//   organization: "",
-//   apiKey: "",
-// });
-// const openai = new OpenAIApi(configuration);
+import React, { useState } from "react";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-function Chat() {
-  const [message, setMessage] = useState("");
-  const [chats, setChats] = useState([]);
-  const [isTyping, setIsTyping] = useState(false);
+// Import styles
+import "./App.css";
+import ChatHistory from "./ChatHistory";
+import Loading from "./Loading";
 
-  const chat = async (e, message) => {
-    e.preventDefault();
+const Chat = () => {
+  const [userInput, setUserInput] = useState("");
+  const [chatHistory, setChatHistory] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-    if (!message) return;
-    setIsTyping(true);
-    scrollTo(0,1e10)
+  // Initialize the Gemini API
+  const genAI = new GoogleGenerativeAI("");
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    let msgs = chats;
-    msgs.push({ role: "user", content: message });
-    setChats(msgs);
+  // Handle user input
+  const handleUserInput = (e) => {
+    setUserInput(e.target.value);
+  };
 
-    setMessage("");
+  // Send user message to Gemini
+  const sendMessage = async () => {
+    if (userInput.trim() === "") return;
 
-    await openai
-      .createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a EbereGPT. You can help with graphic design tasks",
-          },
-          ...chats,
-        ],
-      })
-      .then((res) => {
-        msgs.push(res.data.choices[0].message);
-        setChats(msgs);
-        setIsTyping(false);
-        scrollTo(0,1e10)
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setIsLoading(true);
+    try {
+      const result = await model.generateContent(userInput);
+      const response = await result.response;
+      const responseText = response.text();
+
+      // Split the response into lines
+      const responseLines = responseText.split("\n");
+
+      // Add user message and each line of the Gemini response to chat history
+      setChatHistory((prev) => [
+        ...prev,
+        { type: "user", message: userInput },
+        ...responseLines.map((line) => ({ type: "bot", message: line })),
+      ]);
+    } catch (error) {
+      console.error("Error sending message", error);
+    } finally {
+      setUserInput("");
+      setIsLoading(false);
+    }
+  };
+
+  // Clear chat history
+  const clearChat = () => {
+    setChatHistory([]);
   };
 
   return (
-    <main>
-      <h1>Chat AI Tutorial</h1>
+    <div className="container mx-auto max-w-md p-6 bg-white shadow-lg rounded-lg mt-10">
+      <h1 className="text-3xl font-bold text-center mb-6 text-black">AlumConnect AI</h1>
 
-      <section>
-        {chats && chats.length
-          ? chats.map((chat, index) => (
-              <p key={index} className={chat.role === "user" ? "user_msg" : ""}>
-                <span>
-                  <b>{chat.role.toUpperCase()}</b>
-                </span>
-                <span>:</span>
-                <span>{chat.content}</span>
-              </p>
-            ))
-          : ""}
-      </section>
-
-      <div className={isTyping ? "" : "hide"}>
-        <p>
-          <i>{isTyping ? "Typing" : ""}</i>
-        </p>
+      <div className="chat-container border rounded-lg p-4 h-96 overflow-y-auto mb-4 bg-gray-50">
+        <ChatHistory chatHistory={chatHistory} />
+        {isLoading && <Loading isLoading={isLoading} />}
       </div>
 
-      <form action="" onSubmit={(e) => chat(e, message)}>
+      <div className="flex items-center space-x-2">
         <input
           type="text"
-          name="message"
-          value={message}
-          placeholder="Type a message here and hit Enter..."
-          onChange={(e) => setMessage(e.target.value)}
+          className="flex-grow px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+          placeholder="Type your message..."
+          value={userInput}
+          onChange={handleUserInput}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
-      </form>
-    </main>
+        <button
+          className="px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition duration-200 focus:outline-none"
+          onClick={sendMessage}
+          disabled={isLoading}
+        >
+          {isLoading ? "Sending..." : "Send"}
+        </button>
+      </div>
+
+      <button
+        className="mt-4 w-full px-4 py-2 rounded-full bg-gray-400 text-white hover:bg-gray-500 transition duration-200 focus:outline-none"
+        onClick={clearChat}
+      >
+        Clear Chat
+      </button>
+    </div>
   );
-}
+};
 
 export default Chat;
